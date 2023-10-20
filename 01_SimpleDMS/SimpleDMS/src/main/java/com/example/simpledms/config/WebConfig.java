@@ -11,7 +11,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * author : kangtaegyung
  * date : 2022/06/14
  * description :
- *  @Configuration : 자바클래스 에 설정 기능을 부여하는 어노테이션 (application.properties 비슷)
+ *
+ * @Configuration : 자바클래스 에 설정 기능을 부여하는 어노테이션 (application.properties 비슷)
  * ===========================================================
  * DATE            AUTHOR             NOTE
  * -----------------------------------------------------------
