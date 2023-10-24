@@ -9,8 +9,19 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import NotFound from "./pages/common/NotFound";
-import DeptListNop from "./pages/dept-nop/DeptListNop";
-import EmpListNop from "./pages/emp-nop/EmpListNop";
+import DeptList from "./pages/basic/dept/DeptList";
+import EmpList from "./pages/basic/emp/EmpList";
+import AddDept from './pages/basic/dept/AddDept';
+import AddEmp from "./pages/basic/emp/AddEmp";
+import Dept from "./pages/basic/dept/Dept";
+import Emp from "./pages/basic/emp/Emp";
+import QnaList from "./pages/basic/qna/QnaList";
+import CustomerList from "./pages/basic/customer/CustomerList";
+import AddQna from "./pages/basic/qna/AddQna";
+import AddCustomer from "./pages/basic/customer/AddCustomer";
+import Qna from "./pages/basic/qna/Qna";
+import Customer from "./pages/basic/customer/Customer";
+import FaqList from "./pages/normal/faq/FaqList";
 
 function App() {
   return (
@@ -32,11 +43,29 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
 
-          {/* Dept */}
-          <Route path="/dept-nop" element={<DeptListNop />} />
-          {/* Emp */}
-          <Route path="/emp-nop" element={<EmpListNop />} />
-          
+          {/* dept */}
+          <Route path="/dept" element={<DeptList />} />
+          <Route path="/add-dept" element={<AddDept />} />
+          <Route path="/dept/:dno" element={<Dept />} />
+
+          {/* emp(연습) */}
+          <Route path="/emp" element={<EmpList />} />
+          <Route path="/add-emp" element={<AddEmp />} />
+          <Route path="/emp/:eno" element={<Emp />} />
+
+          {/* qna */}
+          <Route path="/qna" element={<QnaList />} />
+          <Route path="/add-qna" element={<AddQna />} />
+          <Route path="/qna/:qno" element={<Qna />} />
+
+          {/* customer */}
+          <Route path="/customer" element={<CustomerList />} />
+          <Route path="/add-customer" element={<AddCustomer />} />
+          <Route path="/customer/:cid" element={<Customer />} />
+
+          {/* Faq */}
+          <Route path="/faq" element={<FaqList />} />
+
           {/* NotFound */}
           <Route path="*" element={<NotFound />} />
         </Routes>

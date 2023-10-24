@@ -63,12 +63,12 @@ function HeaderCom() {
                       </li>
                       {/* <!-- 1행 시작--> */}
                       <li className="sidebar-nav-item col-3">
-                        <a href="/dept-nop" className="nav-link active ms-2">
+                        <a href="/dept" className="nav-link active ms-2">
                           Dept
                         </a>
                       </li>
                       <li className="sidebar-nav-item col-3">
-                        <a href="/add-dept-nop" className="nav-link active ms-2">
+                        <a href="/add-dept" className="nav-link active ms-2">
                           Add Dept
                         </a>
                       </li>
@@ -78,12 +78,12 @@ function HeaderCom() {
 
                       {/* <!-- 2행 시작--> */}
                       <li className="sidebar-nav-item col-3">
-                        <a href="/emp-nop" className="nav-link active ms-2">
+                        <a href="/emp" className="nav-link active ms-2">
                           Emp(연습)
                         </a>
                       </li>
                       <li className="sidebar-nav-item col-3">
-                        <a href="/add-emp-nop" className="nav-link active ms-2">
+                        <a href="/add-emp" className="nav-link active ms-2">
                           Add Emp(연습)
                         </a>
                       </li>
