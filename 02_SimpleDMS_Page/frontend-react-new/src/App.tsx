@@ -24,7 +24,12 @@ import Customer from "./pages/basic/customer/Customer";
 import FaqList from "./pages/normal/faq/FaqList";
 import CinemaFaqList from "./pages/normal/cinema/CinemaFaqList";
 import AddFaq from "./pages/normal/faq/AddFaq";
-import AddCinemaFaq from "./pages/normal/cinema/AddCinemaFaq";
+import AddCinemaFaq from './pages/normal/cinema/AddCinemaFaq';
+import Faq from "./pages/normal/faq/Faq";
+import CinemaFaq from "./pages/normal/cinema/CinemaFaq";
+import ReplyBoardList from "./pages/normal/reply-board/ReplyBoardList";
+import ThreadBoard from './pages/normal/thread-Board/ThreadBoard';
+import ThreadBoardList from "./pages/normal/thread-Board/ThreadBoardList";
 
 function App() {
   return (
@@ -66,13 +71,21 @@ function App() {
           <Route path="/add-customer" element={<AddCustomer />} />
           <Route path="/customer/:cid" element={<Customer />} />
 
-          {/* Faq */}
+          {/* faq */}
           <Route path="/faq" element={<FaqList />} />
           <Route path="/add-faq" element={<AddFaq />} />
+          <Route path="/faq/:no" element={<Faq />} />
 
           {/* cinema faq */}
           <Route path="/cinema-faq" element={<CinemaFaqList />} />
           <Route path="/add-cinema-faq" element={<AddCinemaFaq />} />
+          <Route path="/cinema-faq/:cfno" element={<CinemaFaq />} />
+
+          {/* reply-board */}
+          <Route path="/reply-board" element={<ReplyBoardList />} />
+
+          {/* thread-board */}
+          <Route path="/thread-board" element={<ThreadBoardList />} />
 
           {/* NotFound */}
           <Route path="*" element={<NotFound />} />
