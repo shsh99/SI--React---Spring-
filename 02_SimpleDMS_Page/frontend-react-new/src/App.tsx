@@ -27,9 +27,14 @@ import AddFaq from "./pages/normal/faq/AddFaq";
 import AddCinemaFaq from './pages/normal/cinema/AddCinemaFaq';
 import Faq from "./pages/normal/faq/Faq";
 import CinemaFaq from "./pages/normal/cinema/CinemaFaq";
-import ReplyBoardList from "./pages/normal/reply-board/ReplyBoardList";
-import ThreadBoard from './pages/normal/thread-Board/ThreadBoard';
+import ReplyBoardList from './pages/normal/reply-board/ReplyBoardList';
+// import ThreadBoardList from "./pages/normal/thread-board/ThreadBoardList";
+import AddReplyBoard from "./pages/normal/reply-board/AddReplyBoard";
+// import AddThreadBoard from "./pages/normal/thread-board/AddThreadBoard";
+import ReplyBoard from "./pages/normal/reply-board/ReplyBoard";
+import ThreadBoard from "./pages/normal/thread-Board/ThreadBoard";
 import ThreadBoardList from "./pages/normal/thread-Board/ThreadBoardList";
+import AddThreadBoard from "./pages/normal/thread-Board/AddThreadBoard";
 
 function App() {
   return (
@@ -83,9 +88,18 @@ function App() {
 
           {/* reply-board */}
           <Route path="/reply-board" element={<ReplyBoardList />} />
+          <Route path="/add-reply-board" element={<AddReplyBoard />} />
+          {/* 정리 : boardParent = 0 이면 부모글을 클릭 */}
+          {/* 정리 : boardParent = 0 아니면 자식글을 클릭 */}
+          <Route path="/reply-board/bid/:bid/boardParent/:boardParent" element={<ReplyBoard />} />
+
 
           {/* thread-board */}
           <Route path="/thread-board" element={<ThreadBoardList />} />
+          <Route path="/add-thread-board" element={<AddThreadBoard />} />
+
+          <Route path="/thread-board/tid/:tid/tparent/:tparent" element={<ThreadBoard />} />
+
 
           {/* NotFound */}
           <Route path="*" element={<NotFound />} />

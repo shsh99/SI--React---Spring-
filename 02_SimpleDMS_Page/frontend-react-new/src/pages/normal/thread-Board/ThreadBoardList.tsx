@@ -1,9 +1,12 @@
-import { Pagination } from '@mui/material';
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
-import TitleCom from '../../../components/common/TitleCom';
-import ThreadBoardService from '../../../services/normal/ThreadBoardService';
-import IThreadBoard from '../../../types/normal/IThreadBoard';
+// ThreadBoardList.tsx : rfce
+import React from "react";
+import TitleCom from "../../../components/common/TitleCom";
+import { Pagination } from "@mui/material";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import IThreadBoard from "../../../types/normal/IThreadBoard";
+import { useEffect } from "react";
+import ThreadBoardService from "../../../services/normal/ThreadBoardService";
 
 function ThreadBoardList() {
     // todo: 변수 정의
@@ -59,21 +62,21 @@ function ThreadBoardList() {
         setPage(value);
     };
 
-    // ---------------------------------------
-    // todo: 답변 변수 정의
+    // -----------------------------------------------
+    //   todo: 답변글 생성(insert) 부분
     // thread 객체 초기화
     const initialThread = {
         tid: null,
-        subject: "",
-        mainText: "",
+        subject: "",      // 제목
+        mainText: "",     // 본문
         writer: "",
-        views: 0,
-        tGroup: null,
-        tParent: 0,
+        views: 0,        // 조회수
+        tgroup: null,   // 그룹번호
+        tparent: 0      // 부모속성
     };
     // 답변 글 입력 객체
     const [thread, setThread] = useState(initialThread);
-    // thread 버튼 클릭시 상태 저장할 변수 : true/false
+    // reply 버튼 클릭시 상태 저장할 변수 : true/false
     const [threadClicked, setThreadClicked] = useState(false);
 
     // todo: 답변 함수 정의
@@ -87,18 +90,12 @@ function ThreadBoardList() {
     const saveThread = () => {
         // 임시 객체
         let data = {
-            subject: thread.subject,
-            mainText: thread.mainText,
+            subject: thread.subject,      // 제목
+            mainText: thread.mainText,    // 본문
             writer: thread.writer,
-            views: 0,
-            // 그룹번호(부모글 == 자식글)
-            // rule : 1) 부모글 최초생성 또는 답변글 없을때 0 저장
-            //        2) 답변글 생성이면 부모글 게시판번호(bid) 저장
-            tGroup: thread.tid,
-            // 부모글번호 :
-            // rule : 1) 부모글 최초생성 또는 답변글 없을때 자신의 게시판번호(bid) 저장
-            //        2) 답변글 생성이면 부모글번호(bid)
-            tParent: thread.tid,
+            views: 0,                     // 조회수
+            tgroup: thread.tid,   // 그룹번호(부모번호(bid) == 자식번호(bid))
+            tparent: thread.tid   // 부모번호(tid)        
         };
 
         ThreadBoardService.create(data) // 벡엔드 답변글 저장 요청
@@ -113,19 +110,20 @@ function ThreadBoardList() {
             });
     };
 
-    //  게시물 thread 버튼 클릭시 화면에 답변입력창 보이게 하는 함수
+    //  게시물 reply 버튼 클릭시 화면에 답변입력창 보이게 하는 함수
     const newThread = (data: any) => {
-        // 매개변수 데이터(객체) 수정 : boardContent: "" 수정
+        // 매개변수 데이터(객체) 수정 : mainText(내용): "" 수정
         setThread({ ...data, mainText: "" });
-        // 답변 입력창 화면보이기 : threadClicked = true
+        // 답변 입력창 화면보이기 : setThreadClicked = true
         setThreadClicked(true);
     };
 
     //  답변 입력창 숨기기
     const closeThread = () => {
-        // 답변 입력창 화면숨기기 : threadClicked = false
+        // 답변 입력창 화면숨기기 : replyClicked = false
         setThreadClicked(false);
     };
+
     return (
         // 여기
         <div>
@@ -139,7 +137,7 @@ function ThreadBoardList() {
                     <input
                         type="text"
                         className="form-control"
-                        placeholder="Search by title"
+                        placeholder="Search by Subject"
                         value={searchSubject}
                         onChange={onChangeSearchSubject}
                     />
@@ -184,12 +182,12 @@ function ThreadBoardList() {
                 <table className="table">
                     <thead>
                         <tr>
-                            <th scope="col">threadBoard No</th>
-                            <th scope="col">threadBoard subject</th>
-                            <th scope="col">threadBoard mainText</th>
-                            <th scope="col">threadBoard Writer</th>
-                            <th scope="col">views</th>
-                            <th scope="col">thread</th>
+                            <th scope="col">board No</th>
+                            <th scope="col">board Subject</th>
+                            <th scope="col">board Main Text</th>
+                            <th scope="col">board Writer</th>
+                            <th scope="col">view Cnt</th>
+                            <th scope="col">reply</th>
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
@@ -205,7 +203,7 @@ function ThreadBoardList() {
                                     <td>{data.views}</td>
                                     <td>
                                         {/* 클릭 : 아래 답변 폼이 열림 */}
-                                        {data.tParent == 0 && (
+                                        {data.tparent == 0 && (
                                             <Link to={"#"}>
                                                 {/* 리액트 : onClick={함수명} : 매개변수없으면 */}
                                                 {/* 리액트 : onClick={()=>함수명(매개변수)} : 매개변수있으면 */}
@@ -213,7 +211,7 @@ function ThreadBoardList() {
                                                     className="badge bg-warning"
                                                     onClick={() => newThread(data)}
                                                 >
-                                                    thread
+                                                    Thread
                                                 </span>
                                             </Link>
                                         )}
@@ -222,10 +220,10 @@ function ThreadBoardList() {
                                         {/* 클릭 : 상세화면 이동 */}
                                         <Link
                                             to={
-                                                "/thread-board/bid/" +
+                                                "/thread-board/tid/" +
                                                 data.tid +
-                                                "/boardParent/" +
-                                                data.tParent
+                                                "/tparent/" +
+                                                data.tparent
                                             }
                                         >
                                             <span className="badge bg-success">Edit</span>
@@ -237,7 +235,7 @@ function ThreadBoardList() {
                 </table>
                 {/* table end */}
 
-                {/* thread form start(답변글) */}
+                {/* reply form start(답변글) */}
                 <div>
                     {/* 변수명 && 태그 : 변수명 = true 태그가 보이고 */}
                     {/* 변수명 && 태그 : 변수명 = false 태그가 안보임 */}
@@ -261,7 +259,7 @@ function ThreadBoardList() {
 
                             <div className="col-md-12 row mt-2">
                                 <label htmlFor="subject" className="col-md-2 col-form-label">
-                                    subject
+                                    Subject
                                 </label>
                                 <div className="col-md-10">
                                     <input
@@ -276,11 +274,8 @@ function ThreadBoardList() {
                             </div>
 
                             <div className="col-md-12 row mt-2">
-                                <label
-                                    htmlFor="mainText"
-                                    className="col-md-2 col-form-label"
-                                >
-                                    mainText
+                                <label htmlFor="mainText" className="col-md-2 col-form-label">
+                                    main Text
                                 </label>
                                 <div className="col-md-10">
                                     <input
@@ -296,11 +291,8 @@ function ThreadBoardList() {
                             </div>
 
                             <div className="col-md-12 row mt-2">
-                                <label
-                                    htmlFor="writer"
-                                    className="col-md-2 col-form-label"
-                                >
-                                    Writer
+                                <label htmlFor="writer" className="col-md-2 col-form-label">
+                                    writer
                                 </label>
                                 <div className="col-md-10">
                                     <input
@@ -334,10 +326,10 @@ function ThreadBoardList() {
                         </div>
                     )}
                 </div>
-                {/* thread form end */}
+                {/* reply form end */}
             </div>
         </div>
-    )
+    );
 }
 
-export default ThreadBoardList
+export default ThreadBoardList;

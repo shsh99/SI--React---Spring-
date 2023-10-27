@@ -1,8 +1,7 @@
-// ReplyBoardService.ts : axios 공통 crud 함수
+// ThreadBoardService.ts : axios 공통함수
 
 import IThreadBoard from "../../types/normal/IThreadBoard";
 import http from "../../utils/http-common";
-import IReplyBoard from './../../types/normal/IReplyBoard';
 
 // 전체 조회 + like 검색(paging 기능 : page(현재페이지), size(1페이지당개수))
 const getAll = (subject: string, page: number, size: number) => {
@@ -31,8 +30,8 @@ const update = (tid: any, data: IThreadBoard) => {
 
 // 삭제함수 : 게시물(부모글) + 답변글(자식글) 모두 삭제
 //      그룹번호 : 부모글과 자식글은 모두 그룹번호가 같음
-const removeBoard = (tGroup: any) => {
-    return http.delete<any>(`/normal/thread-board/deletion/${tGroup}`);
+const removeBoard = (boardGroup: any) => {
+    return http.delete<any>(`/normal/thread-board/deletion/${boardGroup}`);
 };
 
 // 삭제함수 : 답변글만 삭제
@@ -40,7 +39,7 @@ const remove = (tid: any) => {
     return http.delete<any>(`/normal/thread/deletion/${tid}`);
 };
 
-const ThreadBoardService = {
+const ReplyBoardService = {
     getAll,
     get,
     createBoard,
@@ -50,4 +49,4 @@ const ThreadBoardService = {
     remove,
 };
 
-export default ThreadBoardService;
+export default ReplyBoardService;

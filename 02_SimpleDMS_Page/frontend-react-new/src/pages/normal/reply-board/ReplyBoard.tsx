@@ -1,38 +1,39 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
-import IThreadBoard from '../../../types/normal/IThreadBoard';
-import ThreadBoardService from '../../../services/normal/ThreadBoardService';
-import TitleCom from '../../../components/common/TitleCom';
+// ReplyBoard.tsx : 상세화면
+import React, { useEffect, useState } from "react";
+import TitleCom from "../../../components/common/TitleCom";
+import { useNavigate, useParams } from "react-router-dom";
+import IReplyBoard from "../../../types/normal/IReplyBoard";
+import ReplyBoardService from "../../../services/normal/ReplyBoardService";
 
-function ThreadBoard() {
+function ReplyBoard() {
     // todo: 변수 정의
-    // 전체조회 페이지에서 전송한 기본키(tid, boardParent)
-    const { tid, boardParent } = useParams();
+    // 전체조회 페이지에서 전송한 기본키(bid, boardParent)
+    const { bid, boardParent } = useParams();
     // 강제페이지 이동 함수
     let navigate = useNavigate();
 
     // 객체 초기화(상세조회 : 기본키 있음)
-    const initialThreadBoard = {
-        tid: "",
-        subject: "",      // 제목
-        mainText: "",     // 본문
-        writer: "",
-        views: 0,        // 조회수
-        tgroup: null,   // 그룹번호
-        tparent: 0      // 부모속성
+    const initialReplyBoard = {
+        bid: "",
+        boardTitle: "",
+        boardContent: "",
+        boardWriter: "",
+        viewCnt: 0,
+        boardGroup: null,
+        boardParent: 0,
     };
 
     // 수정될객체
-    const [threadBoard, setThreadBoard] = useState<IThreadBoard>(initialThreadBoard);
+    const [replyBoard, setReplyBoard] = useState<IReplyBoard>(initialReplyBoard);
     // 화면에 수정 성공에 메세지 찍기 변수
     const [message, setMessage] = useState<string>("");
 
     // todo: 함수 정의
     // 상세조회 함수
-    const getThreadBoard = (tid: string) => {
-        ThreadBoardService.get(tid) // 벡엔드로 상세조회 요청
+    const getReplyBoard = (bid: string) => {
+        ReplyBoardService.get(bid) // 벡엔드로 상세조회 요청
             .then((response: any) => {
-                setThreadBoard(response.data);
+                setReplyBoard(response.data);
                 console.log(response.data);
             })
             .catch((e: Error) => {
@@ -40,23 +41,23 @@ function ThreadBoard() {
             });
     };
 
-    // 화면이 뜰때 실행되는 이벤트 + tid 값이 바뀌면 실행
+    // 화면이 뜰때 실행되는 이벤트 + bid 값이 바뀌면 실행
     useEffect(() => {
-        if (tid) getThreadBoard(tid);
-    }, [tid]);
+        if (bid) getReplyBoard(bid);
+    }, [bid]);
 
     // input 태그 수동 바인딩
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        setThreadBoard({ ...threadBoard, [name]: value });
+        setReplyBoard({ ...replyBoard, [name]: value });
     };
 
     // 수정 함수
-    const updateThreadBoard = () => {
-        ThreadBoardService.update(threadBoard.tid, threadBoard) // 벡엔드로 수정요청
+    const updateReplyBoard = () => {
+        ReplyBoardService.update(replyBoard.bid, replyBoard) // 벡엔드로 수정요청
             .then((response: any) => {
                 console.log(response.data);
-                setMessage("threadboard 수정되었습니다!");
+                setMessage("replyboard 수정되었습니다!");
             })
             .catch((e: Error) => {
                 console.log(e);
@@ -64,12 +65,12 @@ function ThreadBoard() {
     };
 
     // 삭제함수 : 게시물만 삭제
-    const deleteThread = () => {
-        ThreadBoardService.remove(threadBoard.tid) // 벡엔드로 삭제요청
+    const deleteReply = () => {
+        ReplyBoardService.remove(replyBoard.bid) // 벡엔드로 삭제요청
             .then((response: any) => {
                 console.log(response.data);
                 // 페이지 이동
-                navigate("/thread-board");
+                navigate("/reply-board");
             })
             .catch((e: Error) => {
                 console.log(e);
@@ -78,12 +79,12 @@ function ThreadBoard() {
 
     // 삭제함수 : 게시물 + 답변글 2개 삭제 (그룹번호로 삭제)
     //   그룹번호(boardGroup) : 부모글번호 === 자식글번호
-    const deleteThreadBoard = () => {
-        ThreadBoardService.removeBoard(threadBoard.tgroup) // 벡엔드로 삭제요청
+    const deleteReplyBoard = () => {
+        ReplyBoardService.removeBoard(replyBoard.boardGroup) // 벡엔드로 삭제요청
             .then((response: any) => {
                 console.log(response.data);
                 // 페이지 이동
-                navigate("/thread-board");
+                navigate("/reply-board");
             })
             .catch((e: Error) => {
                 console.log(e);
@@ -94,30 +95,30 @@ function ThreadBoard() {
         // 여기
         <>
             {/* 제목 start */}
-            <TitleCom title="thread Board Detail" />
+            <TitleCom title="Reply Board Detail" />
             {/* 제목 end */}
 
             <>
-                {threadBoard ? (
+                {replyBoard ? (
                     <div className="col-6 mx-auto">
                         <form>
                             <div className="row g-3 align-items-center mb-3">
                                 <div className="col-3">
-                                    <label htmlFor="subject" className="col-form-label">
-                                        subject
+                                    <label htmlFor="boardTitle" className="col-form-label">
+                                        boardTitle
                                     </label>
                                 </div>
 
                                 <div className="col-9">
                                     <input
                                         type="text"
-                                        id="subject"
+                                        id="boardTitle"
                                         required
                                         className="form-control"
-                                        value={threadBoard.subject}
+                                        value={replyBoard.boardTitle}
                                         onChange={handleInputChange}
-                                        placeholder="subject"
-                                        name="subject"
+                                        placeholder="boardTitle"
+                                        name="boardTitle"
                                         disabled={boardParent != "0" ? true : false}
                                     />
                                 </div>
@@ -125,42 +126,42 @@ function ThreadBoard() {
 
                             <div className="row g-3 align-items-center mb-3">
                                 <div className="col-3">
-                                    <label htmlFor="mainText" className="col-form-label">
-                                        mainText
+                                    <label htmlFor="boardContent" className="col-form-label">
+                                        boardContent
                                     </label>
                                 </div>
 
                                 <div className="col-9">
                                     <input
                                         type="text"
-                                        id="mainText"
+                                        id="boardContent"
                                         required
                                         className="form-control"
-                                        value={threadBoard.mainText}
+                                        value={replyBoard.boardContent}
                                         onChange={handleInputChange}
-                                        placeholder="mainText"
-                                        name="mainText"
+                                        placeholder="boardContent"
+                                        name="boardContent"
                                     />
                                 </div>
                             </div>
 
                             <div className="row g-3 align-items-center mb-3">
                                 <div className="col-3">
-                                    <label htmlFor="writer" className="col-form-label">
-                                        writer
+                                    <label htmlFor="boardWriter" className="col-form-label">
+                                        boardWriter
                                     </label>
                                 </div>
 
                                 <div className="col-9">
                                     <input
                                         type="text"
-                                        id="writer"
+                                        id="boardWriter"
                                         required
                                         className="form-control"
-                                        value={threadBoard.writer}
+                                        value={replyBoard.boardWriter}
                                         onChange={handleInputChange}
-                                        placeholder="writer"
-                                        name="writer"
+                                        placeholder="boardWriter"
+                                        name="boardWriter"
                                     />
                                 </div>
                             </div>
@@ -171,14 +172,14 @@ function ThreadBoard() {
                             {boardParent != "0" ? (
                                 <button
                                     className="btn btn-outline-primary ms-3 col"
-                                    onClick={deleteThread}
+                                    onClick={deleteReply}
                                 >
                                     Delete
                                 </button>
                             ) : (
                                 <button
                                     className="btn btn-outline-danger ms-3 col"
-                                    onClick={deleteThreadBoard}
+                                    onClick={deleteReplyBoard}
                                 >
                                     Delete
                                 </button>
@@ -187,7 +188,7 @@ function ThreadBoard() {
                             <button
                                 type="submit"
                                 className="btn btn-outline-success ms-2 col"
-                                onClick={updateThreadBoard}
+                                onClick={updateReplyBoard}
                             >
                                 Update
                             </button>
@@ -200,12 +201,12 @@ function ThreadBoard() {
                 ) : (
                     <div className="col-6 mx-auto">
                         <br />
-                        <p>Please click on a Thread Board...</p>
+                        <p>Please click on a Reply Board...</p>
                     </div>
                 )}
             </>
         </>
-    )
+    );
 }
 
-export default ThreadBoard
+export default ReplyBoard;
